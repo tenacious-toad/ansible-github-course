@@ -40,7 +40,6 @@
     apt: name=apache2 state=2.4.29-1ubuntu4 force_apt_get=true
     become: yes
   - name: Ensure PHP is installed
-    nonsense
     apt: name=php7.2 state=7.2.3-1ubuntu1 force_apt_get=true
     become: yes
   - name: Ensure PHP Module for Apache is installed
