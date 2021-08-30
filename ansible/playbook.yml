@@ -1,13 +1,22 @@
-
 ---
 
-- name: Ensure basic configuration for all servers is correct
+- name: Basic configuration for all servers
   # The approach in this playbook is shared on numerous locations online, it is impossible to find the original source
   # One source is: https://serverfault.com/questions/132970/can-i-automatically-add-a-new-host-to-known-hosts
   hosts: all
   gather_facts: no
   connection: local
   tasks:
+    - name: ensure .ssh directory exists
+      file:
+        path: ~/.ssh
+        mode: 0700
+        state: directory
+    - name: ensure known_hosts file exists
+      copy:
+        content: ""
+        dest: ~/.ssh/known_hosts
+        mode: 0600
     - name: "check if known_hosts contains server's fingerprint"
       command: ssh-keygen -F {{ inventory_hostname }}
       register: keygen
@@ -37,22 +46,22 @@
     apt: update_cache=yes
     become: yes
   - name: Ensure Apache is installed
-    apt: name=apache2 state=2.4.29-1ubuntu4 force_apt_get=true
+    apt: name=apache2=2.4.29* state=present
     become: yes
   - name: Ensure PHP is installed
-    apt: name=php7.2 state=7.2.3-1ubuntu1 force_apt_get=true
+    apt: name=php7.2=7.2.24* state=present
     become: yes
   - name: Ensure PHP Module for Apache is installed
-    apt: name=libapache2-mod-php7.2 state=7.2.3-1ubuntu1 force_apt_get=true
+    apt: name=libapache2-mod-php7.2=7.2.24* state=present
     become: yes
   - name: Ensure MySql Module for Apache is installed
-    apt: name=php7.2-mysql state=7.2.3-1ubuntu1 force_apt_get=true
+    apt: name=php7.2-mysql=7.2.24* state=present
     become: yes
 
 - name: Deploy the application-package
   hosts: web-servers
   tasks:
-  - name: Ensure PHP files exist
+  - name: Install PHP File
     copy:
       src: files/index.php
       dest: /var/www/html/index.php
