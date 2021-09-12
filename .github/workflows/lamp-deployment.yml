@@ -66,6 +66,6 @@ jobs:
       with:
         playbook: playbook.yml
         directory: ansible
+        vault_password: ${{ secrets.VAULT_PASSWORD }}
         options: |
           --inventory inventory-prod.yml
-          --extra-vars "prod_ssh_password=${{ Secrets.PROD_SSH_PASSWORD }}"
