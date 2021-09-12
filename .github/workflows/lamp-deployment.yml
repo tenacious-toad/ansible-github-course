@@ -40,6 +40,12 @@ jobs:
       with:
         name: playbooks
         path: ansible
+
+    - uses: jacobtomlinson/gha-find-replace@master
+      name: Find and Replace  
+      with:
+        find: "%TEST_SSH_PASSWORD%"
+        replace: "${{ secrets.TEST_SSH_PASSWORD }}"
     
     - uses: dawidd6/action-ansible-playbook@v2
       with:
@@ -47,7 +53,6 @@ jobs:
         directory: ansible
         options: |
           --inventory inventory-test.yml
-          --extra-vars "test_ssh_password=${{ Secrets.TEST_SSH_PASSWORD }}"
 
   deploy_to_prod:
     name: Deploy to production
