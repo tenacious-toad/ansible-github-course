@@ -13,5 +13,5 @@ jobs:
         uses: ansible/ansible-lint@main # or version tag instead of 'main'
         with:
           targets: |
-            ansible/playbook.yml
-            ansible/inventory.yml
+            *.yml
+            roles/*/tasks/*.yml
